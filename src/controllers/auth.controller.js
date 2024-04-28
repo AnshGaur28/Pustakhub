@@ -22,7 +22,8 @@ const loginController = async (req, res) => {
         email: user[0].email,
         password: hashedPassword,
         role: user[0].role,
-        mobile : user[0].mobile
+        mobile : user[0].mobile,
+        userId : user[0]._id
       },
       "JWT_SECRET"
     );

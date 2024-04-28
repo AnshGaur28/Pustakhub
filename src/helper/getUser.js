@@ -1,9 +1,12 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models/user.model.js')
 const getUser = async (req , res)=>{
     try{
         const token = req.token ;
-        const user = jwt.verify(token, 'JWT_SECRET');
-        // console.log('user-------' , user);
+        const userData = jwt.verify(token, 'JWT_SECRET');
+        const userId = userData.userId
+        const user = await User.findOne({_id : userId});
+        console.log(user);
         return res.status(200).send({message : "User found Successfully" , user : user})
     }
     catch(error){
