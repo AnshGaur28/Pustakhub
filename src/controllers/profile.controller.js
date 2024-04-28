@@ -48,7 +48,7 @@ const addAddressProfileController = async(req ,res)=>{
     const token = req.jwt ;
     try{
         const newAddress = req.body.newAddress ;
-        const userInfo = jwtDecode(token , 'SECRET_KEY');
+        const userInfo = jwtDecode(token , process.env.JWT_SECRET);
         await User.findByIdAndUpdate({email : userInfo.email} , {$push : {locations : newAddress}});
     }
     catch(error){
@@ -62,7 +62,7 @@ const editAddressProfileController = async(req ,res)=>{
     try{
         const newAddress = req.body.newAddress ;
         const addresstoFind = req.body.address ;
-        const userInfo = jwtDecode(token , 'SECRET_KEY');
+        const userInfo = jwtDecode(token , process.env.JWT_SECRET);
         const profile = await Profile.find({email : userInfo.email});
         const addressIndex = profile.locations.findIndex((address)=> {
             return address.city === addresstoFind.city

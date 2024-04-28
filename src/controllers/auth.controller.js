@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user.model.js");
 const bcrypt = require('bcrypt');
 // const Profile  = require("../../../pustakhub-frontend/src/pages/profilePage.jsx");
+require('dotenv').config();
 const loginController = async (req, res) => {
   try {
     const inputData = req.body;
@@ -16,6 +17,7 @@ const loginController = async (req, res) => {
     console.log(user[0]);
     const saltRounds = 10; // Number of salt rounds
     const hashedPassword = await bcrypt.hash(inputData.password, saltRounds);
+    console.log(process.env.JWT_SECRET);
     const token = jwt.sign(
       {
         username : user[0].username ,
@@ -25,7 +27,8 @@ const loginController = async (req, res) => {
         mobile : user[0].mobile,
         userId : user[0]._id
       },
-      "JWT_SECRET"
+      // "JWT_SECRET"
+      process.env.JWT_SECRET
     );
     return res
       .status(200)
@@ -54,7 +57,7 @@ const registerController = async (req, res) => {
         role,
     }) ;
     await newUser.save()
-    const token = jwt.sign({userId : newUser._id} , 'JWT_SECRET' ,{expiresIn : '1h'});
+    const token = jwt.sign({userId : newUser._id} , process.env.JWT_SECRET ,{expiresIn : '1h'});
     return res.status(201).json({ success: true, user: newUser , jwt: token});
   } 
   catch (error) {
